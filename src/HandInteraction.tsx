@@ -1,21 +1,27 @@
 
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback, useState } from "react";
 import Webcam from "react-webcam";
 import { Camera } from "@mediapipe/camera_utils";
 import {Hands, Results} from "@mediapipe/hands";
 import  drawCanvas  from "./drawCanvas";
 import "./HandInteraction.css"
 
+import MyElement3D from './MyElement3D.tsx'
+import { Canvas } from '@react-three/fiber'
+
 function HandInteraction(){
   const webcamRef = useRef<Webcam>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const resultsRef = useRef<Results>();
+
+  const [res, setRes] = useState<Results | null>(null)
 
   const onResults = useCallback((results: Results) => {
     resultsRef.current = results;
 
     const canvasCtx = canvasRef.current!.getContext("2d")!;
     drawCanvas(canvasCtx, results);
+    setRes(results);
   }, []);
 
   // 초기 설정
@@ -81,8 +87,15 @@ function HandInteraction(){
           Output Data
         </button>
       </div>
+      <div className="canvas3D">
+        <Canvas>
+          <MyElement3D result={res}/>
+        </Canvas>
+      </div>
     </div>
+    
   )
 }
 
 export default HandInteraction
+
