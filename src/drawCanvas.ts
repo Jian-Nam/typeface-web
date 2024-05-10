@@ -1,6 +1,7 @@
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 import { HAND_CONNECTIONS, Results } from "@mediapipe/hands";
 
+
 function drawCanvas (ctx: CanvasRenderingContext2D, results: Results) {
   const width = ctx.canvas.width;
   const height = ctx.canvas.height;

@@ -14,14 +14,11 @@ function HandInteraction(){
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const resultsRef = useRef<Results>();
 
-  const [res, setRes] = useState<Results | null>(null)
-
   const onResults = useCallback((results: Results) => {
     resultsRef.current = results;
 
     const canvasCtx = canvasRef.current!.getContext("2d")!;
     drawCanvas(canvasCtx, results);
-    setRes(results);
   }, []);
 
   // 초기 설정
@@ -89,7 +86,7 @@ function HandInteraction(){
       </div>
       <div className="canvas3D">
         <Canvas>
-          <MyElement3D result={res}/>
+          <MyElement3D resultRef={resultsRef}/>
         </Canvas>
       </div>
     </div>

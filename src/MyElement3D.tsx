@@ -2,25 +2,29 @@ import { Results } from "@mediapipe/hands"
 import { MeshProps, useFrame } from "@react-three/fiber"
 import { useEffect, useRef } from "react"
 import { Mesh } from "three"
+import Face from "./Face"
+
+//import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 
 
-function MyElement3D({result}:{result: Results | null}){
-  const boxRef = useRef<Mesh>(null!);
+function MyElement3D({resultRef}:{resultRef:  React.MutableRefObject<Results | undefined>}){
+  const faceRef = useRef<Mesh>(null!);
+
   useFrame((_, delta) => {
-    console.log(result?.multiHandLandmarks[0][0].x)
-    if(result?.multiHandLandmarks[0][0]){
+    const result = resultRef.current;
+    const fraction = 0.05
+    if(result?.multiHandLandmarks.length){
       const x = -(result?.multiHandLandmarks[0][0].x - 0.5) * 10
       const y = -(result?.multiHandLandmarks[0][0].y - 0.5) * 10
-      boxRef.current.position.x = (boxRef.current.position.x * 0.95) + (x * 0.05)
-      boxRef.current.position.y = (boxRef.current.position.y * 0.95) + (y * 0.05)
+      faceRef.current.position.x = (faceRef.current.position.x * (1 - fraction)) + (x * fraction)
+      faceRef.current.position.y = (faceRef.current.position.y * (1 - fraction)) + (y * fraction)
     }
   })
   return(
     <>
       <directionalLight position={[1, 1, 1]}/>
-      <mesh ref={boxRef}>
-        <boxGeometry/>
-        <meshStandardMaterial color="blue"/>
+      <mesh ref={faceRef}>
+        <Face/>
       </mesh>
     </>
   )
